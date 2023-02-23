@@ -24,11 +24,11 @@ type AppRouteObject = AppIndexRouteObject | AppNonIndexRouteObject
 const appRoutes: AppRouteObject[] = [
   {
     path: '/',
+    // circular dependency
     element: <BasicLayout/>,
     children: [
       {
         index: true,
-        path: '/tour',
         element: <TourDemo/>,
         label: 'tour',
       },
@@ -64,7 +64,7 @@ const generateMenuItems = () => {
   }
   return childrenRoute.children.map(child => {
     return {
-      key: child.path,
+      key: child.path || layoutPath,
       icon: child.icon,
       label: child.label
     };
