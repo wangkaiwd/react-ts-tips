@@ -5,7 +5,7 @@ import styles from './index.module.less';
 import React, { Suspense, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { menuItems } from '../router/routes';
-import Logo from '../components/PageFallback/Logo/Logo';
+import Logo from '../components/Logo/Logo';
 
 const { Sider, Header, Content } = Layout;
 const BasicLayout = () => {
