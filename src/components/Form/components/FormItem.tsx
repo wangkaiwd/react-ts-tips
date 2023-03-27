@@ -11,10 +11,9 @@ export interface FormItemProps {
   rules?: Rule[];
 }
 
-// required
 const FormItem = forwardRef((props: FormItemProps, ref) => {
   const { fieldProps = {}, label, rules = [] } = props;
-  const { onChange } = fieldProps;
+  const { onChange, value } = fieldProps;
   const [error, setError] = useState('');
   const checkRequiredValue = (value: any, rule: any) => {
     if (isFalsy(value)) {
@@ -61,7 +60,9 @@ const FormItem = forwardRef((props: FormItemProps, ref) => {
           {...fieldProps}
           onChange={(e) => {
             onChange(e.target.value);
-            validateItem(e.target.value);
+          }}
+          onBlur={() => {
+            validateItem(value);
           }}
         />
       </div>
