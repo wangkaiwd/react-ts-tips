@@ -1,26 +1,58 @@
 import { Input } from 'antd';
-import { useState } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import { isFalsy } from '../utils';
+import type { Rule } from '../types';
 
 export interface FormItemProps {
   type?: string;
   name: string; // collect values
   label?: string;
   fieldProps?: Record<string, any>;
+  rules?: Rule[];
 }
 
 // required
-const FormItem = (props: FormItemProps) => {
-  const { fieldProps = {}, name, label } = props;
+const FormItem = forwardRef((props: FormItemProps, ref) => {
+  const { fieldProps = {}, label, rules = [] } = props;
   const { onChange } = fieldProps;
-  const [hasError, setHasError] = useState(false);
-  const validateItem = (value: any) => {
+  const [error, setError] = useState('');
+  const checkRequiredValue = (value: any, rule: any) => {
     if (isFalsy(value)) {
-      setHasError(true);
-    } else {
-      setHasError(false);
+      setError(rule.message || `请输入${label}`);
+      return false;
     }
+    setError('');
+    return true;
   };
+  const checkMaxLengthValue = (value: any, rule: any) => {
+    if (value?.length > rule.maxLength) {
+      setError(rule.message || `最大长度${rule.maxLength}`);
+      return false;
+    }
+    setError('');
+    return true;
+  };
+  const validateItem = (value: any) => {
+    for (let i = 0; i < rules.length; i++) {
+      const rule: any = rules[i];
+      if (rule.required) {
+        if (!checkRequiredValue(value, rule)) {
+          return false;
+        }
+      }
+      if (rule.maxLength) {
+        if (!checkMaxLengthValue(value, rule)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+  useImperativeHandle(ref, () => {
+    return {
+      validateItem
+    };
+  });
   return (
     <div className={'form-item'}>
       <div className={'form-item-control'}>
@@ -34,13 +66,13 @@ const FormItem = (props: FormItemProps) => {
         />
       </div>
       {
-        hasError &&
+        error &&
         <div className={'form-item-error'} style={{ color: 'red' }}>
-          错误提示
+          {error}
         </div>
       }
     </div>
   );
-};
+});
 
 export default FormItem;
