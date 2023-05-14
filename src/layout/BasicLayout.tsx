@@ -1,5 +1,5 @@
 // @ts-ignore
-import {Avatar, Button, Layout, Menu, MenuProps, Space, theme} from 'antd/dist/antd.js';
+import {Avatar, Button, Layout, Menu, MenuProps, Space, theme} from 'antd';
 import {useSnapshot} from 'valtio';
 import user, {updateUserName} from '../store/user';
 import styles from './index.module.less';
