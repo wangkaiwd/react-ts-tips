@@ -16,6 +16,9 @@ interface FormProps {
   rules?: Rules;
 }
 
+// todo:
+// 1. remove any
+// 2. reference by antd
 const Form = forwardRef((props: FormProps, ref) => {
   const { formValues, children, onChange, rules } = props;
   const itemRef = useRef<any>({});
@@ -63,7 +66,3 @@ const Form = forwardRef((props: FormProps, ref) => {
 });
 
 export default Form;
-
-// formValues
-// onChange
-// rules: { username:[{required:true,message:'please input username'}] }
